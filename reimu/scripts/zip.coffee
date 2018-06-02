@@ -13,10 +13,6 @@ urlUtil = require './utils/urlUtil'
 
 COORDINATES_PRECIS = 4
 
-getGoogleMapUrl = (lat, lng) ->
-  return "https://www.google.com/maps?q=#{lat},#{lng}"
-
-
 module.exports = (robot) ->
 
   robot.respond /zip ([0-9]{7})/i, (res) ->
@@ -46,4 +42,4 @@ module.exports = (robot) ->
       lat/=c if c>0
       lng = calcUtil.roundN(lng, COORDINATES_PRECIS)
       lat = calcUtil.roundN(lat, COORDINATES_PRECIS)
-      res.send getGoogleMapUrl(lat, lng)
+      res.send urlUtil.getGoogleMapUrl(lat, lng)
