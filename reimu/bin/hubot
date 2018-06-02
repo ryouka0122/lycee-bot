@@ -2,9 +2,11 @@
 
 set -e
 
-npm install
+npm install --no-audit
 export PATH="node_modules/.bin:node_modules/hubot/node_modules/.bin:$PATH"
 
-export HUBOT_SLACK_TOKEN=SLACK_TOKEN_KEY
+export PORT=8081
+
+export HUBOT_SLACK_TOKEN=`cat ./bin/HUBOT_SLACK_TOKEN.txt | head -1`
 
 exec node_modules/.bin/hubot --name "reimu" "$@"
