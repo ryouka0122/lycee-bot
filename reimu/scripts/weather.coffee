@@ -20,11 +20,11 @@ request = require 'request'
 calcUtil = require './utils/calcUtil'
 urlUtil = require './utils/urlUtil'
 
-privateInfo = require './privateInfo'
+configUtil = require './utils/configUtil'
 
 COORDINATES_PRECIS = 4
 
-DARKSKY_API_KEY = privateInfo.getDarkSkyApiKey()
+DARKSKY_API_KEY = configUtil.getDarkSkyApiKey()
 
 
 getWeatherInfo = (zipCode, callback) ->
