@@ -6,6 +6,10 @@ node_modules
 fran/bin/HUBOT_SLACK_TOKEN.txt
 fran/properties/config.json
 
+# patchouli
+patchouli/bin/HUBOT_SLACK_TOKEN.txt
+patchouli/properties/config.json
+
 # reimu
 reimu/bin/HUBOT_SLACK_TOKEN.txt
 reimu/properties/config.json
