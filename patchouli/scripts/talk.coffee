@@ -15,13 +15,43 @@ _async = require 'async'
 urlUtil = require './utils/urlUtil'
 configUtil = require './utils/configUtil'
 
+# パチュリーの機嫌度合い（この数値が高いといい返事をしてくれる）
+PATCHOULI_HEALTH = 20
+
+# 通常の返事
+REPLY_MESSAGE = [
+    "なに？",
+    "何か御用かしら？",
+    "呼んだ？",
+]
+
+# 機嫌が悪いときの返事
+GRUMPY_MESSAGE = [
+  "うるさいわよ？",
+  "本を読んでるの，邪魔しないで",
+  "（・・・）"
+]
+
+random = (min=1, max=100) ->
+  return Math.floor(Math.random() * (1 + max - min)) + min
+
+getRandomElem = (ary) ->
+  len = ary.length
+  pos = Math.floor(Math.random() * len)
+  return ary[pos]
+
+replyMessage = ->
+  value = random()
+  if value < PATCHOULI_HEALTH
+    return getRandomElem(GRUMPY_MESSAGE)
+  return getRandomElem(REPLY_MESSAGE)
 
 module.exports = (robot) ->
   robot.respond /(.*)/i, (res) ->
     msg = res.match[1]
 
     if !msg || /(ぱちぇ|ぱちゅりー|パチェ|パチュリー)/i.test msg
-      res.send "何か御用かしら？"
+      res.send replyMessage()
       return
 
     _async.waterfall([
