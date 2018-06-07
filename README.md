@@ -1,6 +1,7 @@
 # lycee-bot
 SlackのBOT用リポジトリ
 
+
 ## 各BOTの主な役割
 
 ### 霊夢 / reimu
@@ -11,3 +12,6 @@ SlackのBOT用リポジトリ
 
 ### パチュリー / patchouli
 自然言語を解析して，ほかのBOTと連動させる
+
+### レミリア / remilia
+Pythonで動作し，AWS周りと連動させる
