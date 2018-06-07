@@ -51,7 +51,7 @@ module.exports = (robot) ->
     msg = res.match[1]
 
     if !msg || /(ぱちぇ|ぱちゅりー|パチェ|パチュリー)/i.test msg
-      res.send replyMessage()
+      res.respond replyMessage()
       return
 
     _async.waterfall([

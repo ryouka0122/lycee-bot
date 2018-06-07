@@ -3,10 +3,13 @@
 set -e
 
 npm install --no-audit
+
 export PATH="node_modules/.bin:node_modules/hubot/node_modules/.bin:$PATH"
 
 export PORT=8080
 
 export HUBOT_SLACK_TOKEN=`cat ./bin/HUBOT_SLACK_TOKEN.txt | head -1`
 
-exec node_modules/.bin/hubot --name "fran" "$@"
+forever start -a -l /app/devops/logs/fran.log -o /app/devops/logs/fran.out -e /app/devops/logs/fran_error.log -c coffee node_modules/.bin/hubot --name "fran" "$@"
+
+#exec node_modules/.bin/hubot --name "fran" "$@"
