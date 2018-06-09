@@ -3,7 +3,7 @@
 BASE_DIR=$(cd $(dirname $0)/..; pwd)
 LOG_DIR="/app/devops/logs"
 
-for NAME in `cat hubot.lst` ; do
+for NAME in `cat ${BASE_DIR}/sh/hubot.lst` ; do
   SCRIPT_DIR=${BASE_DIR}/${NAME}
 
   cd ${SCRIPT_DIR}
