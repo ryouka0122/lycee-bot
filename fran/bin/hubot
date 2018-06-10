@@ -15,6 +15,9 @@ LOG_PATH=${LOG_BASEDIR}/${NAME}.log
 OUT_PATH=${LOG_BASEDIR}/${NAME}.out
 ERR_PATH=${LOG_BASEDIR}/${NAME}_error.log
 
-forever start -a -l ${LOG_PATH} -o ${OUT_PATH} -e ${ERR_PATH} -c coffee node_modules/.bin/hubot --name "${NAME}" "$@"
+FOREVER_OPTIONS="--minUptime 1000 --spinSleepTime 1000 --uid ${NAME}"
+LOG_OPTIONS="-a -l ${LOG_PATH} -o ${OUT_PATH} -e ${ERR_PATH}"
 
-#exec node_modules/.bin/hubot --name "fran" "$@"
+forever start ${FOREVER_OPTIONS} ${LOG_OPTIONS} -c coffee node_modules/.bin/hubot --name "${NAME}" "$@"
+
+exit $?
