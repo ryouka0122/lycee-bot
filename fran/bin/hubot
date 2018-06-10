@@ -9,7 +9,7 @@ export PORT=8102
 export HUBOT_SLACK_TOKEN=`cat ./bin/HUBOT_SLACK_TOKEN.txt | head -1`
 
 NAME=fran
-LOG_BASEDIR=/app/devops/logs
+LOG_BASEDIR=/app/logs/lycee-bot
 
 LOG_PATH=${LOG_BASEDIR}/${NAME}.log
 OUT_PATH=${LOG_BASEDIR}/${NAME}.out
