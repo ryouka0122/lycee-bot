@@ -15,6 +15,6 @@ LOG_PATH=${LOG_BASEDIR}/${NAME}.log
 OUT_PATH=${LOG_BASEDIR}/${NAME}.out
 ERR_PATH=${LOG_BASEDIR}/${NAME}_error.log
 
-forever start -a -l ${LOG_PATH} -o ${OUT_PATH} -e ${ERR_PATH} -c coffee node_modules/.bin/hubot --name "${NAME}" "$@"
+forever start --uid "${NAME}" -a -l ${LOG_PATH} -o ${OUT_PATH} -e ${ERR_PATH} -c coffee node_modules/.bin/hubot --name "${NAME}" "$@"
 
-#exec node_modules/.bin/hubot --name "fran" "$@"
+exit $?
