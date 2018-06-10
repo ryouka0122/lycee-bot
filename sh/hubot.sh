@@ -32,7 +32,9 @@ fi
 
 # -------------------------------------------
 # load bashrc (for 'npm' command)
-if [ -z "$(whereis npm)" ] ; then
+RES=`whereis npm | grep -o npm | wc -l`
+if [ "1" == "${RES}" ] ; then
+  echo "load bashrc"
   source ~/.bashrc
 fi
 
@@ -45,7 +47,7 @@ else
   RET=$?
 
   if [ "0" != "$RET" ] ; then
-    echo ""
+    echo "failure forever process (uid=${HUBOT_NAME})"
     exit $RET
   fi
 fi
@@ -54,14 +56,14 @@ fi
 # start forever process via hubot startup script
 if [ "start" == "${COMMAND}" ] ; then
   HUBOT_ROOTDIR=$(cd $(dirname $0)/..; pwd)
-  SCRIPT_DIR=${HUBOT_ROOTDIR}/${NAME}
+  SCRIPT_DIR=${HUBOT_ROOTDIR}/${HUBOT_NAME}
 
   cd ${SCRIPT_DIR}
 
   sh ./bin/hubot --adapter slack
   RET=$?
   
-  echo -n "running hubot (${NAME}) ..."
+  echo -n "running hubot (${HUBOT_NAME}) ..."
   if [ "0" == "${RET}" ] ; then
     echo "[SUCCESS]"
   else
