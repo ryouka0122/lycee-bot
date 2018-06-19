@@ -16,3 +16,4 @@ reimu/properties/config.json
 .idea/
 remilia/__pycache__/
 remilia/plugins/__pycache__/
+*.pyc

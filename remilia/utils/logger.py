@@ -36,13 +36,20 @@ class LogHelper:
     # ------------------------------------------------------
     # 引数を出力する関数
     @staticmethod
-    def dump(*args, **kwargs):
+    def pre_dump(*args, **kwargs):
         print('-- ARGUMENTS DUMP --')
         for arg in args:
             print("[args]: {}".format(arg))
 
         for key in kwargs:
             print("[kwargs]: {}={}". format(key, kwargs[key]))
+
+    # ------------------------------------------------------
+    # 引数を出力する関数
+    @staticmethod
+    def post_dump(retval):
+        print('-- RETURN VALUE DUMP --')
+        print("[retval]: {}".format(retval))
 
     # ------------------------------------------------------
     # 何もしない関数

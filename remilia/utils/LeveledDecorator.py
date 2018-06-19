@@ -24,15 +24,15 @@ class LeveledDecoratorExecutor:
     def __call__(self, *args, **kwargs):
         if self.activator() and callable(self.pre_hook):
             self.pre_hook(*args, **kwargs)
-
         try:
-            self.func(*args, **kwargs)
+            retval = self.func(*args, **kwargs)
+
+            if self.activator() and callable(self.post_hook) and retval is not None:
+                self.post_hook(retval)
+                return retval
         except BaseException as e:
             if callable(self.exception_handler):
                 self.exception_handler(e)
-        else:
-            if self.activator() and callable(self.post_hook):
-                self.post_hook(*args, **kwargs)
 
 
 # -------------------------------------------------
