@@ -6,7 +6,6 @@ import sys
 
 
 # カレントディレクトリをシステムパスに追加
-print(os.getcwd())
 sys.path.append(os.getcwd())
 
 
