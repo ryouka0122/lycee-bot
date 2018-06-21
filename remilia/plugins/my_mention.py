@@ -27,10 +27,22 @@ from remilia.utils.logger import *
 # message.react('icon_emoji')  発言者のメッセージにリアクション(スタンプ)する
 #                               文字列中に':'はいらない
 
-JST = timezone(timedelta(hours=+9), 'JST')
-
-
+# GOOラボAPIアクセスキー
 GOO_API_KEY = 'd3cbf392f9af4cb5e9caca9a338b23c1fb12f8382a4d984a9e06a23c6db900a9'
+
+# ピン止めメッセージの基準日数
+DEFAULT_PINNED_ITEM_OLD_AGO = timedelta(days=14)
+
+# 文句を言う基準日数
+ALERT_PINNED_ITEM_OLD_AGO = timedelta(days=18)
+
+# 文句のセリフリスト
+ALERT_MESSAGE_LIST = [
+    '{}個も放置してるの？しっかりしてよね！？',
+    '{}個も溜まってるわよ？',
+    '散らかってるじゃない・・・早く片付けなさい :anger:',
+    '放置してるピン止めメッセージがあるなんて・・・ :sweat_drops:',
+]
 
 # ログレベルの設定
 LogHelper.set_level(LogLevel.INFO)
@@ -70,13 +82,13 @@ def listen_nice(message):
 @debug(LogHelper.pre_dump)
 def info_func(message, channel):
     api = SlackApi('https://slack.com/api/', "xoxb-291993555617-376453222198-ILjYjazutVG3Qj9DF0EoEdgN")
-    channelId = api.channelId(channel)
+    channel_id = api.channelId(channel)
 
-    if channelId is "":
+    if channel_id is '':
         message.send('チャンネル情報が取れなかった．．．')
         return
 
-    result = api.pins(channelId)
+    result = api.pins(channel_id)
     if result['ok'] is False:
         message.send('{}のピン止めメッセージが取れなかった．．．'.format(channel))
         return
@@ -84,24 +96,53 @@ def info_func(message, channel):
     now = datetime.now()
     response = ''
     count = 0
-    for item in result['items']:
-        print(item)
-        if item['type'] == 'message':
-            count += 1
-            pinned_item = item['message']
+    marked_item_count = 0
+    alerted_item_count = 0
 
-            ctime = ts2date(float(pinned_item['ts']))  # ピン止めされたメッセージが作成された時間
-            ptime = getPastTimeStr(now, ctime)  # 経過時間の算出
-
-            response += '{mark}{created} ({past}前)\n{link}\n'.format(
-                mark='',
-                created=ctime.strftime('%Y/%m/%d(%a) %H:%M:%S'),
-                past=ptime,
-                link=pinned_item['permalink']
+    for item in sorted(
+            map(
+                lambda x: x['message'],
+                filter(
+                    lambda x: x['type'] == 'message',
+                    result['items']
                 )
-        else:
-            print("not message : {}".format(item))
+            ),
+            key=lambda x: x['ts'],
+            reverse=False
+    ):
+        print(item)
+        count += 1
+
+        mark = ''
+        created_time = ts2date(float(item['ts']))  # ピン止めされたメッセージが作成された時間
+        past_time = getPastTimeStr(now, created_time)  # 経過時間の算出
+
+        if check_old_date(now, created_time, DEFAULT_PINNED_ITEM_OLD_AGO):
+            mark = ':partly_sunny: '  # 晴れ曇りマーク
+            marked_item_count += 1
+
+        if check_old_date(now, created_time, ALERT_PINNED_ITEM_OLD_AGO):
+            mark = ':fire: '  # 炎マーク
+            alerted_item_count += 1
+
+        response += '{mark}{created} ({past}前)\n{link}\n'.format(
+            mark=mark,
+            created=created_time.strftime('%Y/%m/%d(%a) %H:%M:%S'),
+            past=past_time,
+            link=item['permalink']
+            )
+
     message.send('ピン止め数：{}\n'.format(count) + response)
+    if marked_item_count > 0:
+        message.send('古いピン止めメッセージ数：{}'.format(marked_item_count))
+
+    if alerted_item_count > 0:
+        message.send(random.choice(ALERT_MESSAGE_LIST).format(alerted_item_count))
+
+
+@info(pre_hook=LogHelper.pre_dump, post_hook=LogHelper.post_dump)
+def check_old_date(current, target, delta):
+    return (current - target) > delta
 
 
 @info(pre_hook=LogHelper.pre_dump, post_hook=LogHelper.post_dump)
