@@ -5,12 +5,12 @@ import random
 from slackbot.bot import respond_to     # @botname: で反応するデコーダ
 from slackbot.bot import listen_to      # チャネル内発言で反応するデコーダ
 from slackbot.bot import default_reply  # 該当する応答がない場合に反応するデコーダ
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 
 
 from remilia.apis.gooApi import GooMorphApi
 from remilia.apis.slackApi import *
-from remilia.utils.logger import *
+from lycee.core.utils.logger import LogHelper, info, debug, LogLevel
 
 # @respond_to('string')     bot宛のメッセージ
 #                           stringは正規表現が可能 「r'string'」
