@@ -1,4 +1,4 @@
-from lycee.core import LeveledDecorator
+from lycee.bot.utils import LeveledDecorator
 
 
 # ----------------------------------------
