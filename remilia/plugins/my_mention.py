@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 
 from remilia.apis.gooApi import GooMorphApi
 from remilia.apis.slackApi import *
-from lycee.core.utils.logger import LogHelper, info, debug, LogLevel
+from lycee.bot.utils.logger import LogHelper, info, debug, LogLevel
 
 # @respond_to('string')     bot宛のメッセージ
 #                           stringは正規表現が可能 「r'string'」
