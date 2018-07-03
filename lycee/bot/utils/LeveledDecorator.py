@@ -52,4 +52,3 @@ class LeveledDecorator:
     def __call__(self, func):
         self.executor.set_function(func)
         return self.executor
-
