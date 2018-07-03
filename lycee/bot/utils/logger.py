@@ -1,4 +1,4 @@
-from remilia.utils.LeveledDecorator import LeveledDecorator
+from lycee.bot.utils import LeveledDecorator
 
 
 # ----------------------------------------
