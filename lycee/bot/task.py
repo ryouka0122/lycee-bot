@@ -185,8 +185,8 @@ class TaskManager:
         すべてのタスクを停止
     """
     def stop_all(self):
-        for t in self.task_list:
-            t.stop()
+        for name in self.task_list:
+            self.task_list[name].stop()
 
     """
         タスクの除去
@@ -201,6 +201,6 @@ class TaskManager:
         すべてのタスクを除去
     """
     def remove_all(self):
-        for t in self.task_list:
-            t.stop()
+        for name in self.task_list:
+            self.task_list[name].stop()
         self.task_list.clear()
