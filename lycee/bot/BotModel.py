@@ -1,15 +1,17 @@
 # coding: utf-8
 
 from lycee.bot.task import TaskManager
-from lycee.bot.slackapi import SlackMethod, SlackApi
 
 
 class BotModel:
-    SLACK_API_ENDPOINT = 'https://slack.com/api/'
 
-    def __init__(self, name: str, slack_api_token: str):
+    """
+        コンストラクタ
+        :arg
+            name: BOT名（識別用）
+    """
+    def __init__(self, name: str):
         self.name = name
-        self.slackApi = SlackApi(slack_api_token, BotModel.SLACK_API_ENDPOINT)
         self.taskManager = TaskManager(task_size=100, is_override=True)
 
     """
@@ -20,7 +22,8 @@ class BotModel:
             func: 定期実行したい呼び出し可能オブジェクト
     """
     def add_task(self, name: str, crontab: str, func: callable):
-        self.taskManager.add(name, crontab, func)
+        if self.taskManager.add(name, crontab, func):
+            self.taskManager.start(name)
 
     """
         定期実行タスクの削除
@@ -40,8 +43,4 @@ class BotModel:
             APIのレスポンス情報
     """
     def send_message(self, channel: str, message: str) -> dict:
-        if channel[0] != '#':
-            channel = self.slackApi.get_channel_id(channel[1:])
-        if channel == '':
-            return dict()
-        return self.slackApi.send_message(channel, message)
+        pass

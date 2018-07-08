@@ -1,4 +1,6 @@
-from lycee.bot.utils import LeveledDecorator
+# coding: utf-8
+
+from lycee.bot.utils.LeveledDecorator import LeveledDecorator
 
 
 # ----------------------------------------
