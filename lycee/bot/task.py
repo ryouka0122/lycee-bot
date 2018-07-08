@@ -75,7 +75,7 @@ class Task:
     """
     def update(self) -> bool:
         if not self.is_continue():
-            logging.info('[{}] Finish Task'.format(self.name))
+            logging.debug('[{}] Finish Task'.format(self.name))
             return False
 
         # インターバルの計算（端数切り上げ）
@@ -93,7 +93,7 @@ class Task:
             self.timer.cancel()
             self.timer = None
             if not self.stop_flag:
-                logging.info('[{}] call event'.format(self.name))
+                logging.debug('[{}] call event'.format(self.name))
                 self.taskEvent(*self.args, **self.kwargs)
         self.update()
 

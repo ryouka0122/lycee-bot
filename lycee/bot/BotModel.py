@@ -1,10 +1,9 @@
 # coding: utf-8
 
-from slackbot.bot import Bot
 from lycee.bot.task import TaskManager
 
 
-class BotModel(Bot):
+class BotModel:
 
     """
         コンストラクタ
@@ -12,7 +11,6 @@ class BotModel(Bot):
             name: BOT名（識別用）
     """
     def __init__(self, name: str):
-        super().__init__()
         self.name = name
         self.taskManager = TaskManager(task_size=100, is_override=True)
 
