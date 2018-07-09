@@ -5,6 +5,10 @@ import os
 import sys
 
 from slackbot.bot import Bot
+
+# カレントディレクトリをシステムパスに追加
+sys.path.append(os.getcwd())
+
 from patchouli.plugins import patchouli
 
 logging.basicConfig(
@@ -12,9 +16,6 @@ logging.basicConfig(
     format='%(asctime)s:%(levelname)5s\t%(message)s',
     datefmt='%Y/%m/%D %H:%M:%S'
 )
-
-# カレントディレクトリをシステムパスに追加
-sys.path.append(os.getcwd())
 
 
 def main():
