@@ -2,16 +2,11 @@
 
 import logging
 from slackbot.bot import listen_to, respond_to, default_reply, settings
-from lycee.bot.task import TaskManager
 from patchouli.bots import Patchouli
 
-import time
 
 # BOT本体
 patchouli = Patchouli.make(settings.API_TOKEN)
-
-# タスク管理
-taskManager = TaskManager()
 
 
 def routine():
@@ -35,6 +30,12 @@ def say(message):
 def pins_list(message, channel):
     global patchouli
     patchouli.check_pins(message, channel)
+
+
+@respond_to(r'^task$')
+def command_task(message):
+    global patchouli
+    patchouli.show_task_list(message)
 
 
 @listen_to('リッスン')
