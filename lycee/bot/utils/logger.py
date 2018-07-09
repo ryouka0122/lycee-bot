@@ -1,4 +1,7 @@
-from remilia.utils.LeveledDecorator import LeveledDecorator
+# coding: utf-8
+
+import logging
+from lycee.bot.utils.LeveledDecorator import LeveledDecorator
 
 
 # ----------------------------------------
@@ -31,25 +34,25 @@ class LogHelper:
     @staticmethod
     def log(level, msg):
         if LogHelper.check(level):
-            print(msg)
+            logging.debug(msg)
 
     # ------------------------------------------------------
     # 引数を出力する関数
     @staticmethod
     def pre_dump(*args, **kwargs):
-        print('-- ARGUMENTS DUMP --')
+        logging.debug('-- ARGUMENTS DUMP --')
         for arg in args:
-            print("[args]: {}".format(arg))
+            logging.debug("[args]: {}".format(arg))
 
         for key in kwargs:
-            print("[kwargs]: {}={}". format(key, kwargs[key]))
+            logging.debug("[kwargs]: {}={}". format(key, kwargs[key]))
 
     # ------------------------------------------------------
     # 引数を出力する関数
     @staticmethod
     def post_dump(retval):
-        print('-- RETURN VALUE DUMP --')
-        print("[retval]: {}".format(retval))
+        logging.debug('-- RETURN VALUE DUMP --')
+        logging.debug("[retval]: {}".format(retval))
 
     # ------------------------------------------------------
     # 何もしない関数
