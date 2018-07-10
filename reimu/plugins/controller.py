@@ -20,7 +20,7 @@ def task_weather():
 def setup():
     global reimu
     reimu.update_channel_list()
-    reimu.add_task('task_weather', '0 8-20 * * *', task_weather)
+    reimu.add_task('task_weather', '0 7-20 * * *', task_weather)
 
 
 # 初期化実行
