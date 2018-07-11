@@ -1,18 +1,49 @@
 # coding: utf-8
 
+import logging
+
 from lycee.bot.task import TaskManager
+from slackbot.bot import SlackClient
 
 
 class BotModel:
+
+    # BOTリスト（Key=API-KEY / Value=BOT）
+    botList = {}
+
+    @staticmethod
+    def make(cls, api_token: str):
+        if api_token not in BotModel.botList:
+            BotModel.botList[api_token] = cls(api_token)
+        return BotModel.botList[api_token]
 
     """
         コンストラクタ
         :arg
             name: BOT名（識別用）
+            api_token: Slack API Token
     """
-    def __init__(self, name: str):
+    def __init__(self, name: str, api_token: str):
         self.name = name
         self.taskManager = TaskManager(task_size=100, is_override=True)
+
+        self.slackClient = SlackClient(
+            token=api_token,
+            connect=True
+        )
+        self.channel_list = {}
+        self.update_channel_list()
+
+    """
+        BOTが識別できるチャンネルのリストを更新
+    """
+    def update_channel_list(self):
+        response = self.slackClient.webapi.channels.list(True, True)
+        if response.successful:
+            self.channel_list.clear()
+            for ch in filter(lambda c: c['is_member'], response.body['channels']):
+                self.channel_list[ch['name']] = ch['id']
+            logging.debug(self.channel_list)
 
     """
         定期実行タスクの追加

@@ -1,10 +1,9 @@
 # coding: utf-8
 
-import logging
 import requests
 
-from lycee.bot.BotModel import BotModel
-from slackbot.bot import SlackClient
+from lycee.bot.model import BotModel
+
 
 # 座標算出の精度
 COORDINATES_PRICIS = 4
@@ -48,31 +47,8 @@ def convert_zip_to_coord(zipcode: str) -> dict:
 class Reimu(BotModel):
     ERRMSG_HEARTRAILS = "geoapi.heartrails.comとの通信に失敗しました"
 
-    # BOTリスト（Key=API-KEY / Value=BOT）
-    botList = {}
-
-    @staticmethod
-    def make(api_token: str):
-        if api_token not in Reimu.botList:
-            Reimu.botList[api_token] = Reimu(api_token)
-        return Reimu.botList[api_token]
-
     def __init__(self, api_token: str):
-        super().__init__('reimu')
-
-        self.slackClient = SlackClient(
-            token=api_token,
-            connect=True
-        )
-        self.channel_list = {}
-
-    def update_channel_list(self):
-        response = self.slackClient.webapi.channels.list(True, True)
-        if response.successful:
-            self.channel_list.clear()
-            for ch in filter(lambda c: c['is_member'], response.body['channels']):
-                self.channel_list[ch['name']] = ch['id']
-            logging.info(self.channel_list)
+        super().__init__('reimu', api_token)
 
     def get_weather_info(self, zipcode, callback):
         coord = convert_zip_to_coord(zipcode)

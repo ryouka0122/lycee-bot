@@ -1,23 +1,33 @@
 # coding: utf-8
 
-import logging
+import random
+import time
 from slackbot.bot import listen_to, respond_to, default_reply, settings
+from lycee.bot.model import BotModel
 from patchouli.bots import Patchouli
 
 
 # BOT本体
-patchouli = Patchouli.make(settings.API_TOKEN)
+patchouli = BotModel.make(Patchouli, settings.API_TOKEN)
 
 
 def routine():
     global patchouli
+
+    # 発言タイミングを揺らがせる（1分～10分）
+    delay_min = random.randrange(1, 10)
+    delay_sec = random.randrange(0, 60)
+    time.sleep(delay_min * 60 + delay_sec)
+
     patchouli.routine_chat('test_chat')
 
 
 def setup():
     global patchouli
     patchouli.add_task('routineTask', '0 8-20 * * *', routine)
-    patchouli.update_channel_list()
+
+
+setup()
 
 
 @respond_to('メンション')

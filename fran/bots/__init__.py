@@ -1,10 +1,7 @@
 # coding: utf-8
 
-import logging
-from lycee.bot.BotModel import BotModel
-from slackbot.bot import SlackClient
-
 from datetime import datetime
+from lycee.bot.model import BotModel
 
 
 def ts2date(ts):
@@ -33,31 +30,8 @@ def getPastTimeStr(now, old):
 
 class Fran(BotModel):
 
-    # BOTリスト（Key=API-KEY / Value=BOT）
-    botList = {}
-
-    @staticmethod
-    def make(api_token: str):
-        if api_token not in Fran.botList:
-            Fran.botList[api_token] = Fran(api_token)
-        return Fran.botList[api_token]
-
     def __init__(self, api_token: str):
-        super().__init__('fran')
-
-        self.slackClient = SlackClient(
-            token=api_token,
-            connect=True
-        )
-        self.channel_list = {}
-
-    def update_channel_list(self):
-        response = self.slackClient.webapi.channels.list(True, True)
-        if response.successful:
-            self.channel_list.clear()
-            for ch in filter(lambda c: c['is_member'], response.body['channels']):
-                self.channel_list[ch['name']] = ch['id']
-            logging.info(self.channel_list)
+        super().__init__('fran', api_token)
 
     def cmd_pin(self, message, channel):
         if channel is None or channel == '':
@@ -69,7 +43,6 @@ class Fran(BotModel):
             return
 
         response = self.slackClient.webapi.pins.list(self.channel_list[channel])
-
         if not response.successful:
             message.reply('ピン止め情報が取れなかった．．．')
             return

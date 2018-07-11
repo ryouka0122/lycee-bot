@@ -2,10 +2,10 @@
 
 import logging
 import numpy as np
-from slackbot.slackclient import SlackClient
-from lycee.bot import BotModel
-from datetime import datetime, timedelta
 import random
+
+from datetime import datetime, timedelta
+from lycee.bot.model import BotModel
 
 
 # 重みつき確率による選択
@@ -14,16 +14,7 @@ def choice_weight(weight, label):
     return np.random.choice(label, p=wa)
 
 
-class Patchouli(BotModel.BotModel):
-    # BOTリスト（Key=API-KEY / Value=BOT）
-    botList = {}
-
-    @staticmethod
-    def make(api_token: str):
-        if api_token not in Patchouli.botList:
-            Patchouli.botList[api_token] = Patchouli(api_token)
-
-        return Patchouli.botList[api_token]
+class Patchouli(BotModel):
 
     # ピン止めメッセージの基準日数
     DEFAULT_PINNED_ITEM_OLD_AGO = timedelta(days=14)
@@ -46,7 +37,6 @@ class Patchouli(BotModel.BotModel):
         (1, "また魔理沙に盗られた（´・ω・｀）"),
     ]
 
-
     # 通常の返事
     REPLY_MESSAGE = [
         "なに？",
@@ -62,23 +52,10 @@ class Patchouli(BotModel.BotModel):
     ]
 
     def __init__(self, api_token: str):
-        super().__init__('patchouli')
-        self.slackClient = SlackClient(
-            token=api_token,
-            connect=True
-        )
-        self.channel_list = {}
+        super().__init__('patchouli', api_token)
 
         # パチュリーの機嫌度合い（この数値が高いといい返事をしてくれる）
         self.mind_health = 30
-
-    def update_channel_list(self):
-        response = self.slackClient.webapi.channels.list(True, True)
-        if response.successful:
-            self.channel_list.clear()
-            for ch in filter(lambda c: c['is_member'], response.body['channels']):
-                self.channel_list[ch['name']] = ch['id']
-            logging.info(self.channel_list)
 
     def routine_chat(self, channel):
         (weight, label) = zip(*Patchouli.REST_MESSAGE)
