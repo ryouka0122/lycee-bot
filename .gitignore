@@ -1,19 +1,4 @@
-node_modules
 .DS_Store*
-.hubot_history
 
-# fran
-fran/bin/HUBOT_SLACK_TOKEN.txt
-fran/properties/config.json
-
-# patchouli
-patchouli/bin/HUBOT_SLACK_TOKEN.txt
-patchouli/properties/config.json
-
-# reimu
-reimu/bin/HUBOT_SLACK_TOKEN.txt
-reimu/properties/config.json
 .idea/
-remilia/__pycache__/
-remilia/plugins/__pycache__/
 *.pyc

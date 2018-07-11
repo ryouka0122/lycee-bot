@@ -20,6 +20,7 @@ class Task:
     """
     def __init__(self, name: str, crontab: str, loop: int, event: callable, *args, **kwargs):
         self.name = name
+        self.crontabStr = crontab
         self.crontab = CronTab(crontab)
 
         self.taskEvent = event
