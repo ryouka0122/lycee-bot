@@ -2,9 +2,10 @@
 
 from reimu.bots import Reimu
 from slackbot.bot import respond_to, default_reply, settings
+from lycee.bot.model import BotModel
 
 # BOT本体
-reimu = Reimu.make(settings.API_TOKEN)
+reimu = BotModel.make(Reimu, settings.API_TOKEN)
 
 
 # 定期実行：天気情報
