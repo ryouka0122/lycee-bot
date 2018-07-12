@@ -128,14 +128,6 @@ class Patchouli(BotModel):
         if alerted_item_count > 0:
             message.send(random.choice(Patchouli.ALERT_MESSAGE_LIST).format(alerted_item_count))
 
-    def show_task_list(self, message):
-        response = ''
-        for taskName in self.taskManager.task_list:
-            response += '{} : {}\n'.format(taskName, self.taskManager.task_list[taskName].crontabStr)
-
-        if response != '':
-            message.send(response)
-
     @staticmethod
     def check_old_date(current, target, delta):
         return (current - target) > delta
