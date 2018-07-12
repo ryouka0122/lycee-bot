@@ -8,7 +8,7 @@ private_settings = None
 def load_token(key: str) -> str:
     global private_settings
     if private_settings is None:
-        f = open('private\rconfig_fran.json')
+        f = open('private/config_fran.json')
         private_settings = json.load(f)
         f.close()
 
