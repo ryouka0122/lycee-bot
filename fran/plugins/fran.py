@@ -14,6 +14,12 @@ def cmd_pin(message, channel: str):
     fran.cmd_pin(message, channel)
 
 
+@respond_to(r'^task$')
+def command_task(message):
+    global fran
+    fran.show_task_list(message)
+
+
 @default_reply()
 def default_func(message):
     text = message.body['text']

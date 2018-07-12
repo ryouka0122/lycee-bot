@@ -44,6 +44,12 @@ def cmd_zip(message, zipcode):
     reimu.zip(message, zipcode)
 
 
+@respond_to(r'^task$')
+def command_task(message):
+    global reimu
+    reimu.show_task_list(message)
+
+
 @default_reply()
 def cmd_default(message):
     text = message.body['text']
