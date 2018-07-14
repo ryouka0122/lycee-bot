@@ -3,12 +3,9 @@
 import random
 import time
 from slackbot.bot import listen_to, respond_to, default_reply, settings
-from lycee.bot.model import BotModel
+
+from lycee.bot.model import BotModelBuilder
 from patchouli.bots import Patchouli
-
-
-# BOT本体
-patchouli = BotModel.make(Patchouli, settings.API_TOKEN)
 
 
 def routine():
@@ -22,12 +19,10 @@ def routine():
     patchouli.routine_chat('test_chat')
 
 
-def setup():
-    global patchouli
-    patchouli.add_task('routineTask', '0 8-20 * * *', routine)
-
-
-setup()
+# BOT本体
+patchouli = BotModelBuilder(Patchouli, settings.API_TOKEN)\
+                .task('routineTask', '0 8-20 * * *', routine)\
+                .make()
 
 
 @respond_to('メンション')

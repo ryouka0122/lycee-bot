@@ -6,6 +6,7 @@ import random
 
 from datetime import datetime, timedelta
 from lycee.bot.model import BotModel
+from lycee.common import convert_text
 
 
 # 重みつき確率による選択
@@ -103,8 +104,8 @@ class Patchouli(BotModel):
             count += 1
 
             mark = ''
-            created_time = Patchouli.ts2date(float(item['ts']))  # ピン止めされたメッセージが作成された時間
-            past_time = Patchouli.getPastTimeStr(now, created_time)  # 経過時間の算出
+            created_time = datetime.fromtimestamp(float(item['ts']))  # ピン止めされたメッセージが作成された時間
+            past_time = convert_text(now - created_time)  # 経過時間の算出
 
             if Patchouli.check_old_date(now, created_time, Patchouli.DEFAULT_PINNED_ITEM_OLD_AGO):
                 mark = ':partly_sunny: '  # 晴れ曇りマーク
@@ -114,12 +115,12 @@ class Patchouli(BotModel):
                 mark = ':fire: '  # 炎マーク
                 alerted_item_count += 1
 
-                res_msg += '{mark}{created} ({past}前)\n{link}\n'.format(
-                    mark=mark,
-                    created=created_time.strftime('%Y/%m/%d(%a) %H:%M:%S'),
-                    past=past_time,
-                    link=item['permalink']
-                )
+            res_msg += '{mark}{created} ({past})\n{link}\n'.format(
+                mark=mark,
+                created=created_time.strftime('%Y/%m/%d(%a) %H:%M:%S'),
+                past=past_time,
+                link=item['permalink']
+            )
 
         message.send('ピン止め数：{}\n'.format(count) + res_msg)
         if marked_item_count > 0:
@@ -131,27 +132,3 @@ class Patchouli(BotModel):
     @staticmethod
     def check_old_date(current, target, delta):
         return (current - target) > delta
-
-    @staticmethod
-    def ts2date(ts):
-        return datetime.fromtimestamp(ts)
-
-    @staticmethod
-    def getPastTimeStr(now, old):
-        delta = now - old
-        spent_time = delta.total_seconds()
-        spent_time /= 60  # 秒数はいらないから破棄
-
-        spent_str = ''
-        if spent_time % 60 > 0:
-            spent_str = '%02d分' % (spent_time % 60)
-            spent_time /= 60
-
-        if spent_time % 24 > 0:
-            spent_str = ('%02d時間' % (spent_time % 24)) + spent_str
-            spent_time /= 24
-
-        if spent_time > 0:
-            spent_str = ('%d日' % spent_time) + spent_str
-
-        return spent_str

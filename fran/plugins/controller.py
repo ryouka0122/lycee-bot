@@ -4,6 +4,7 @@ from slackbot.bot import default_reply, respond_to, settings
 from lycee.bot.model import BotModel
 from fran.bots import Fran
 
+
 fran = BotModel.make(Fran, settings.API_TOKEN)
 
 

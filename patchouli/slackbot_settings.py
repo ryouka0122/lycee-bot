@@ -22,4 +22,6 @@ API_TOKEN = load_token('slackApiToken')
 DEFAULT_REPLY = "・・・なに？"
 
 # プラグインスクリプトを置いてあるサブディレクトリ名のリスト
-PLUGINS = ['plugins']
+PLUGINS = [
+    'plugins',
+]

@@ -47,11 +47,15 @@ class Task:
     """
         タスクの停止
     """
-    def stop(self):
+    def stop(self) -> bool:
+        if self.stop_flag:
+            return False
+
         self.stop_flag = True
         if self.timer:
             self.timer.cancel()
             self.timer = None
+        return True
 
     """
         生存確認
@@ -100,7 +104,7 @@ class Task:
 
 
 class RepeatedTask(Task):
-    def __init__(self, name, crontab, event):
+    def __init__(self, name: str, crontab: str, event: callable):
         super().__init__(
             name=name,
             crontab=crontab,
@@ -117,7 +121,7 @@ class RepeatedTask(Task):
 
 
 class TaskManager:
-    def __init__(self, task_size=100, is_override=True):
+    def __init__(self, task_size: int=100, is_override: bool=True):
         self.task_list = dict()
 
         self.task_size = task_size
@@ -145,7 +149,7 @@ class TaskManager:
             タスクの生成に成功した場合True
             同一タスク名があり，上書きフラグがFalseだった場合，Falseが返る
     """
-    def add(self, name: str, crontab: str, func: callable):
+    def add(self, name: str, crontab: str, func: callable) -> bool:
         if name in self.task_list:
             if not self.is_override:
                 return False
@@ -168,40 +172,44 @@ class TaskManager:
     """
     def start(self, name: str) -> bool:
         task = self.get(name)
-        if task:
-            return task.start()
-        return False
+        return task.start() if task else False
 
     """
         タスクの停止
         :arg
             name 停止させたいタスク名
     """
-    def stop(self, name: str):
+    def stop(self, name: str) -> bool:
         task = self.get(name)
-        if task:
-            task.stop()
+        return task.stop() if task else False
 
     """
         すべてのタスクを停止
     """
     def stop_all(self):
-        for name in self.task_list:
-            self.task_list[name].stop()
+        for task in self.task_list.values():
+            task.stop()
 
     """
         タスクの除去
         :arg
             name: 除去したいタスク名
     """
-    def remove(self, name: str):
-        self.stop(name)
+    def remove(self, name: str) -> bool:
+        if name not in self.task_list:
+            return False
+
+        if not self.stop(name):
+            return False
+
         del self.task_list[name]
+        return True
 
     """
         すべてのタスクを除去
     """
-    def remove_all(self):
-        for name in self.task_list:
-            self.task_list[name].stop()
+    def remove_all(self) -> bool:
+        for task in self.task_list.values():
+            task.stop()
         self.task_list.clear()
+        return True
